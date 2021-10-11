@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Books</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/book.css' %}">
+  <style>
+    a{
+      color: white;
+    }
+    .orderbtn{
+      background-color:rgb(79, 16, 214) ;
+    color: white;
+    border-radius: 0;
+    }
+    .b{
+      padding: 10px;
+      background-color: black;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <!--navbar-->
+
+  <header>
+    <div class="container ">
+
+      <nav class="navbar navbar-expand-lg navbar-light  ">
+        <a class="navbar-brand" href="#">LBMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-l" href="{% url 'index' %}">Home</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-l" href="#">About</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-l" href="#">Contact</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-l" href="{% url 'cart' %}">Cart</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item active">
+              <a class="nav-l" href="{% url 'logout' %}">Log-Out</a>
+            </li>
+            {% endif %}
+          </ul>
+          <hr>
+          <div class="profile-div">
+            <ul class="navbar-nav mr-auto">
+              {% if user.is_authenticated %}
+            <li class="profile-li nav-item">
+              <a class="nav-l" href="{% url 'profile' %}">{{request.user.first_name}} <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+              </svg></a>
+            </li>{% endif %}
+          </ul>
+          
+          </div>
+        </div>
+     
+      </nav>
+
+    </div>
+  </header>
+  <!--head sec-->
+  <section class="py-5">
+  
+    <!--popup-->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Your Order Is Submitted</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>{% for x in book %}
+          <div class="modal-body">
+            <p>contact with library within 24 hour</p>
+            <p><strong>note:</strong>You need to return the book before 10 days</p>
+            <p>*click ok to confirm*</p>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-primary" href="{% url 'order' x.name_of_book %}">Ok</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!--end popup-->
+    <div class="container">
+
+      <div class="row">
+
+       
+        <div class="image col-lg-6 col-md-6 col-12">
+          <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img class="d-block w-100 img-fluid book" src="{{x.photo1.url}}" alt="First slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 img-fluid book" src="{{x.photo2.url}}" alt="Second slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 img-fluid book" src="{{x.photo3.url}}" alt="Third slide">
+              </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="name col-lg-6 col-md-6 col-12"><br>
+          <h2>{{x.name_of_book}}</h2>
+         
+          <h6>{{x.auther}}</h6>
+          <p><strong>average rating : {{rate}}/5 </strong></p>
+          <p><strong id="me2">{{t}}</strong></p>
+          
+          <br>
+          <!-- Button trigger modal -->
+
+          <!--view pages-->
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal2">
+  View Pages
+ </button>
+
+ <!-- Modal -->
+ <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalLabel">Example Pages</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <!--slide-->
+         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+           <div class="carousel-inner">
+             <div class="carousel-item active">
+               <img class="d-block w-100" src="{{x.page1.url}}" alt="First slide">
+             </div>
+             <div class="carousel-item">
+               <img class="d-block w-100" src="{{x.page2.url}}" alt="Second slide">
+             </div>
+             <div class="carousel-item">
+               <img class="d-block w-100" src="{{x.page3.url}}" alt="Third slide">
+             </div>
+           </div>
+           <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+             <span class="sr-only">Previous</span>
+           </a>
+           <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+             <span class="carousel-control-next-icon" aria-hidden="true"></span>
+             <span class="sr-only">Next</span>
+           </a>
+         </div>
+         <!--slide end-->
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         
+       </div>
+     </div>
+   </div>
+ </div>
+         <!--view pages end-->
+        
+        <button id="order-btn" type="submit" class="btn orderbtn " data-toggle="modal" data-target="#exampleModalLong "  value="">Order Now</button>
+       
+          
+          
+        <a href="{% url 'cart2' x.name_of_book %}" class="btn"><span class="material-icons">
+          shopping_cart
+          </span></a>
+          <br><br><br>
+          <p> <strong> Description : </strong> <br>
+            <hr>{{x.description}}
+          </p>
+          <br><br><br>
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Rate And Review</button>
+
+
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Rate And Review</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                 <h6>Only after order you can rate and review</h6>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+                    
+          
+
+          <br><br><br>
+          <div class="all-review">
+            <h6><strong>Reviews</strong></h6>
+            <hr>
+            <div class="review-box">
+              {% for i in review %}
+              <p><strong>{{i.name_of_user}}</strong></p>
+              <pre>{{i.review}}</pre>
+              {% endfor %}
+              <br>
+              <a href="#">see more</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% endfor %}
+
+
+  <script>
+    
+    var me=document.getElementById('me2');
+    if (me.innerHTML=='Not available'){
+     
+   
+      document.getElementById('order-btn').style.display='none';
+
+    }
+  </script>
+ 
+
+  <!--js-->
+  <script src="{% static 'js/j1.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+    integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
