@@ -69,7 +69,7 @@ def send_otp(name_of_user):
     n=str(number)
     otp=str(num_list)
     account_sid = 'AC0a22647ef8de5bbafdb0d6e592d41354' 
-    auth_token = 'be55fd28b25aeeffeaade967a4c00c17' 
+    auth_token = '5e766b038eebfb8a8e48bec5464e380c' 
     client = Client(account_sid, auth_token) 
  
     message = client.messages.create(  
